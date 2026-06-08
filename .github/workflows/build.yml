@@ -12,6 +12,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -51,7 +53,7 @@ jobs:
                 .footer a { color: #d4af37; text-decoration: none; }
                 .footer a:hover { text-decoration: underline; }
                 
-                /* אזור המייל עם לחצן העתקה שמחכה 2 שניות ביציאה */
+                /* מנגנון חכם: מופיע רק בהתעכבות של חצי שנייה, נעלם אחרי 2 שניות */
                 .email-wrapper { position: relative; display: inline-block; padding-top: 5px; }
                 .copy-btn { 
                     position: absolute; 
@@ -69,19 +71,19 @@ jobs:
                     white-space: nowrap; 
                     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
                     
-                    /* מצב התחלתי מוסתר */
                     opacity: 0;
                     visibility: hidden;
-                    /* הגדרת דליי של 2 שניות בהיעלמות */
                     transition: opacity 0.2s ease, visibility 0.2s ease;
+                    
+                    /* דליי של 2 שניות בהיעלמות (כשהעכבר יוצא) */
                     transition-delay: 2s;
                 }
                 
-                /* בריחוף - הכפתור מופיע מיד בלי שום דליי */
+                /* בריחוף אמיתי וממושך - מחכים חצי שנייה (0.5s) לפני שהכפתור יקפוץ */
                 .email-wrapper:hover .copy-btn { 
                     opacity: 1; 
                     visibility: visible; 
-                    transition-delay: 0s;
+                    transition-delay: 0.5s;
                 }
                 
                 .lightbox { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); user-select: none; align-items: center; justify-content: center; }
@@ -157,5 +159,6 @@ jobs:
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git add index.html
+        git pull --rebase origin main
         git diff-index --quiet HEAD || git commit -m "Auto-build site from folder updates"
-        git push
+        git push origin main
