@@ -24,7 +24,6 @@
         .footer a { color: #d4af37; text-decoration: none; }
         .footer a:hover { text-decoration: underline; }
         
-        /* אזור המייל עם לחצן העתקה שמחכה 2 שניות ביציאה */
         .email-wrapper { position: relative; display: inline-block; padding-top: 5px; }
         .copy-btn { 
             position: absolute; 
@@ -42,19 +41,16 @@
             white-space: nowrap; 
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
             
-            /* מצב התחלתי מוסתר */
             opacity: 0;
             visibility: hidden;
-            /* הגדרת דליי של 2 שניות בהיעלמות */
             transition: opacity 0.2s ease, visibility 0.2s ease;
             transition-delay: 2s;
         }
         
-        /* בריחוף - הכפתור מופיע מיד בלי שום דליי */
         .email-wrapper:hover .copy-btn { 
             opacity: 1; 
             visibility: visible; 
-            transition-delay: 0s;
+            transition-delay: 0.5s;
         }
         
         .lightbox { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); user-select: none; align-items: center; justify-content: center; }
