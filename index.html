@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>הדירות שלנו בצפת</title>
     <style>
-        /* עיצוב כללי של דף הרקע הכהה והנקי */
         body { 
             margin: 0; 
             padding: 40px 20px; 
             font-family: 'Segoe UI', Arial, sans-serif; 
-            background-color: #121212; /* רקע כהה */
+            background-color: #121212; 
             color: #e0e0e0; 
             direction: rtl; 
             text-align: right; 
@@ -21,21 +20,19 @@
             margin: 0 auto; 
         }
         
-        /* כותרת ראשית מינימליסטית */
         h1 { 
             text-align: center; 
-            color: #d4af37; /* זהב עמום ויוקרתי */
+            color: #d4af37; 
             letter-spacing: 1px;
             margin-bottom: 50px; 
             font-size: 32px; 
             font-weight: 300;
         }
         
-        /* כרטיסיית דירה - נקייה, בלי מסגרות כבדות */
         .card { 
             margin-bottom: 50px; 
             padding-bottom: 30px;
-            border-bottom: 1px solid #2a2a2a; /* קו הפרדה עדין במקום מסגרת */
+            border-bottom: 1px solid #2a2a2a; 
         }
         
         h2 { 
@@ -51,7 +48,6 @@
             font-size: 14px; 
         }
         
-        /* תמונה ראשית קבועה */
         .main-img { 
             width: 100%; 
             height: auto; 
@@ -59,9 +55,9 @@
             display: block; 
             margin-bottom: 20px; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            cursor: pointer;
         }
         
-        /* עיצוב הספוילר הנפתח */
         details { 
             margin-top: 15px; 
             cursor: pointer; 
@@ -82,18 +78,19 @@
             display: flex;
             gap: 12px;
             justify-content: flex-start;
+            flex-wrap: wrap; /* מאפשר לתמונות לרדת שורה אם יש הרבה (למשל 10 תמונות) */
         }
         
         .gallery img { 
-            width: 31%; /* גודל קטן - כמעט שליש מסך לכל תמונה */
-            max-height: 100px;
-            object-fit: cover; /* שומר על פרופורציות התמונה */
+            width: 31%; 
+            height: 100px;
+            object-fit: cover; 
             border-radius: 4px; 
             box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+            cursor: pointer;
             transition: transform 0.2s;
         }
         
-        /* אפקט קטן כשמעבירים עכבר על התמונות הקטנות */
         .gallery img:hover {
             transform: scale(1.03);
         }
@@ -105,36 +102,110 @@
             color: #777777; 
             padding-top: 20px; 
         }
+
+        /* --- עיצוב חלון הפופ-אפ (Lightbox) --- */
+        .lightbox {
+            display: none; /* מוסתר כברירת מחדל */
+            position: fixed;
+            z-index: 1000;
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9); /* רקע שחור שקוף */
+            user-select: none;
+        }
+
+        .lightbox-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            max-height: 75vh;
+            object-fit: contain;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+        }
+
+        /* כפתור סגירה */
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close:hover {
+            color: #d4af37;
+        }
+
+        /* חיצי ניווט (קדימה ואחורה) */
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -50px;
+            color: white;
+            font-weight: bold;
+            font-size: 30px;
+            transition: 0.3s;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+        }
+
+        .next {
+            left: 15px; /* חץ קדימה בצד שמאל בגלל עברית */
+            border-radius: 3px 0 0 3px;
+        }
+
+        .prev {
+            right: 15px; /* חץ אחורה בצד ימין בגלל עברית */
+            border-radius: 0 3px 3px 0;
+        }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #d4af37;
+        }
     </style>
 </head>
 <body>
+
     <div class="container">
         <h1>הדירות שלנו בצפת</h1>
         
         <div class="card">
             <h2>עיר העתיקה - אבוהב 4 🏰</h2>
             <p class="meta">☀️ מבנה קשתי עתיק | 🛏️ 6 מיטות פלוס חדר זוגי</p>
-            <img class="main-img" src="img1.png" alt="תמונה ראשית">
+            <img class="main-img gallery-img" src="img1.png" alt="תמונה ראשית">
             
             <details>
                 <summary>📸 תמונות נוספות של הדירה...</summary>
                 <div class="gallery">
-                    <img src="img2.png" alt="תמונה נוספת">
-                    <img src="img3.png" alt="תמונה נוספת">
-                </div>
+                    <img class="gallery-img" src="img2.png" alt="תמונה נוספת">
+                    <img class="gallery-img" src="img3.png" alt="תמונה נוספת">
+                    </div>
             </details>
         </div>
 
         <div class="card">
             <h2>אבוהב 2 - אפשרות לחשמל כשר 🕯️</h2>
             <p class="meta">✨ דירת נופש מרווחת ומושקעת | 🛏️ חדר שינה + ספה נפתחת</p>
-            <img class="main-img" src="img3.png" alt="תמונה ראשית">
+            <img class="main-img gallery-img" src="img3.png" alt="תמונה ראשית">
             
             <details>
                 <summary>📸 תמונות נוספות של הדירה...</summary>
                 <div class="gallery">
-                    <img src="img1.png" alt="תמונה נוספת">
-                    <img src="img2.png" alt="תמונה נוספת">
+                    <img class="gallery-img" src="img1.png" alt="תמונה נוספת">
+                    <img class="gallery-img" src="img2.png" alt="תמונה נוספת">
                 </div>
             </details>
         </div>
@@ -142,13 +213,13 @@
         <div class="card">
             <h2>דירה מפנקת עם נוף לכנרת 🌊</h2>
             <p class="meta">🌊 חלונות פנורמיים לכנרת | 🚶 10 דקות הליכה מהעתיקה</p>
-            <img class="main-img" src="img2.png" alt="תמונה ראשית">
+            <img class="main-img gallery-img" src="img2.png" alt="תמונה ראשית">
             
             <details>
                 <summary>📸 תמונות נוספות של הדירה...</summary>
                 <div class="gallery">
-                    <img src="img1.png" alt="תמונה נוספת">
-                    <img src="img3.png" alt="תמונה נוספת">
+                    <img class="gallery-img" src="img1.png" alt="תמונה נוספת">
+                    <img class="gallery-img" src="img3.png" alt="תמונה נוספת">
                 </div>
             </details>
         </div>
@@ -158,5 +229,72 @@
             <p>לפרטים והזמנות חזרו למייל או התקשרו</p>
         </div>
     </div>
+
+    <div id="myLightbox" class="lightbox">
+        <span class="close" onclick="closeLightbox()">&times;</span>
+        <img class="lightbox-content" id="lightboxImg">
+        <a class="prev" onclick="changeImage(-1)">&#10095;</a> <a class="next" onclick="changeImage(1)">&#10094;</a>  </div>
+
+    <script>
+        let currentImgIndex = 0;
+        let activeGalleryImages = [];
+
+        // פונקציה שמוצאת את כל התמונות בכרטיסייה הספציפית שנלחצה ומציגה את הפופ-אפ
+        document.querySelectorAll('.card').forEach((card) => {
+            const images = Array.from(card.querySelectorAll('.gallery-img'));
+            
+            images.forEach((img) => {
+                img.addEventListener('click', () => {
+                    activeGalleryImages = images; // שומר רק את גלריית הדירה הנוכחית
+                    currentImgIndex = activeGalleryImages.indexOf(img);
+                    openLightbox();
+                });
+            });
+        });
+
+        function openLightbox() {
+            document.getElementById("myLightbox").style.display = "block";
+            updateLightboxImage();
+        }
+
+        function closeLightbox() {
+            document.getElementById("myLightbox").style.display = "none";
+        }
+
+        // עדכון התמונה המוצגת בחלון הגדול
+        function updateLightboxImage() {
+            const lightboxImg = document.getElementById("lightboxImg");
+            lightboxImg.src = activeGalleryImages[currentImgIndex].src;
+        }
+
+        // מעבר בין התמונות (חיצים) - מוגן מפני חריגה מגבולות הרשימה
+        function changeImage(direction) {
+            currentImgIndex += direction;
+            if (currentImgIndex >= activeGalleryImages.length) {
+                currentImgIndex = 0; // חוזר לתמונה הראשונה
+            }
+            if (currentImgIndex < 0) {
+                currentImgIndex = activeGalleryImages.length - 1; // הולך לתמונה האחרונה
+            }
+            updateLightboxImage();
+        }
+
+        // סגירה בלחיצה מחוץ לתמונה
+        document.getElementById("myLightbox").addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLightbox();
+            }
+        });
+
+        // תמיכה במקשי המקלדת (חיצים ו-Esc לסגירה)
+        document.addEventListener('keydown', function(e) {
+            if (document.getElementById("myLightbox").style.display === "block") {
+                if (e.key === "ArrowRight") changeImage(-1); // חץ ימני - תמונה קודמת
+                if (e.key === "ArrowLeft") changeImage(1);   // חץ שמאלי - תמונה הבאה
+                if (e.key === "Escape") closeLightbox();      // מקש Esc - סגירה
+            }
+        });
+    </script>
+
 </body>
 </html>
