@@ -16,9 +16,10 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.x'
+        python-version: '3.10'
 
     - name: Run Build Script
+      shell: python
       run: |
         import os
         base_dir = os.getcwd()
@@ -37,7 +38,6 @@ jobs:
                 .card { margin-bottom: 50px; padding-bottom: 30px; border-bottom: 1px solid #2a2a2a; }
                 h2 { color: #ffffff; margin: 0 0 15px 0; font-size: 22px; font-weight: 400; }
                 
-                /* עיצוב תיבת התיאור שמופיעה מתחת לתמונה */
                 .apt-description { margin: 20px 0; color: #dddddd; font-size: 15px; line-height: 1.6; background-color: #1e1e1e; padding: 15px; border-radius: 6px; border-right: 4px solid #d4af37; white-space: pre-line; }
                 
                 .main-img { width: 100%; height: auto; border-radius: 6px; display: block; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); cursor: pointer; }
@@ -72,7 +72,7 @@ jobs:
             for folder_name in apt_folders:
                 current_apt_path = os.path.join(apartments_dir, folder_name)
                 
-                # קריאת קובץ הטקסט (info.txt) אם קיים
+                # קריאת התיאור מקובץ טקסט
                 desc_html = ""
                 info_path = os.path.join(current_apt_path, 'info.txt')
                 if os.path.exists(info_path):
@@ -82,6 +82,7 @@ jobs:
                             desc_text = desc_text.replace('\n', '<br>')
                             desc_html = f'<div class="apt-description">{desc_text}</div>\n'
                 
+                # שליפת התמונות
                 images = [f for f in os.listdir(current_apt_path) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.webp'))]
                 images.sort(key=lambda f: int(''.join(filter(str.isdigit, f)) or 0))
                 
@@ -89,5 +90,28 @@ jobs:
                 
                 main_img_path = f"דירות/{folder_name}/{images[0]}"
                 
-                # כאן סודר המבנה מחדש: קודם כותרת, אז תמונה, ואז התיאור מקובץ הטקסט
-                html_cards += f
+                # בניית המבנה: כותרת -> תמונה ראשית -> תיאור
+                html_cards += f'\n<div class="card">\n<h2>{folder_name}</h2>\n'
+                html_cards += f'<img class="main-img gallery-img" src="{main_img_path}" alt="תמונה ראשית" loading="lazy">\n'
+                html_cards += desc_html
+                
+                # הוספת תמונות נוספות לספוילר
+                if len(images) > 1:
+                    html_cards += '<details>\n<summary>📸 תמונות נוספות...</summary>\n<div class="gallery">\n'
+                    for extra_img in images[1:]:
+                        html_cards += f'<img class="gallery-img" src="דירות/{folder_name}/{extra_img}" alt="תמונה נוספת" loading="lazy">\n'
+                    html_cards += '</div>\n</details>\n'
+                html_cards += '</div>\n'
+                
+        html_end = """<div class="footer"><p>נשמח לארח אתכם לחופשה צפתית קסומה</p><p>לפרטים והזמנות חזרו למייל או התקשרו</p></div></div><div id="myLightbox" class="lightbox"><div class="lightbox-wrapper"><span class="close" onclick="closeLightbox()">&times;</span><img class="lightbox-content" id="lightboxImg"></div><a class="prev" id="prevBtn" onclick="changeImage(-1)">&#10095;</a><a class="next" id="nextBtn" onclick="changeImage(1)">&#10094;</a></div><script>let currentImgIndex=0;let activeGalleryImages=[];document.querySelectorAll(".card").forEach(card=>{const images=Array.from(card.querySelectorAll(".gallery-img"));images.forEach(img=>{img.addEventListener("click",()=>{activeGalleryImages=images;currentImgIndex=activeGalleryImages.indexOf(img);openLightbox()})})});function openLightbox(){document.getElementById("myLightbox").style.display="flex";updateLightboxImage()}function closeLightbox(){document.getElementById("myLightbox").style.display="none"}function updateLightboxImage(){document.getElementById("lightboxImg").src=activeGalleryImages[currentImgIndex].src;const prevBtn=document.getElementById("prevBtn");const nextBtn=document.getElementById("nextBtn");if(activeGalleryImages.length<=1){prevBtn.classList.add("hidden");nextBtn.classList.add("hidden")}else{if(currentImgIndex===0){prevBtn.classList.add("hidden")}else{prevBtn.classList.remove("hidden")}if(currentImgIndex===activeGalleryImages.length-1){nextBtn.classList.add("hidden")}else{nextBtn.classList.remove("hidden")}}}function changeImage(direction){currentImgIndex+=direction;if(currentImgIndex>=activeGalleryImages.length)currentImgIndex=activeGalleryImages.length-1;if(currentImgIndex<0)currentImgIndex=0;updateLightboxImage()}document.getElementById("myLightbox").addEventListener("click",function(e){if(e.target===this)closeLightbox()});document.addEventListener("keydown",function(e){if(document.getElementById("myLightbox").style.display==="flex"){if(e.key==="ArrowRight"&&currentImgIndex>0){changeImage(-1)}if(e.key==="ArrowLeft"&&currentImgIndex<activeGalleryImages.length-1){changeImage(1)}if(e.key==="Escape")closeLightbox()}});</script></body></html>"""
+        
+        with open('index.html', 'w', encoding='utf-8') as f:
+            f.write(html_start + html_cards + html_end)
+
+    - name: Commit and Push changes
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add index.html
+        git diff-index --quiet HEAD || git commit -m "Auto-build site from folder updates"
+        git push
