@@ -1,0 +1,148 @@
+import os
+
+# הגדרת נתיבים
+base_dir = os.path.dirname(os.path.abspath(__file__))
+apartments_dir = os.path.join(base_dir, 'דירות')
+
+# בדיקה אם תיקיית הדירות קיימת, אם לא - מייצרים אותה
+if not os.path.exists(apartments_dir):
+    os.makedirs(apartments_dir)
+    print("נוצרה תיקייה חדשה בשם 'דירות'. נא להכניס לתוכה תיקיית עבור כל דירה.")
+
+# תחילת בניית ה-HTML המעוצב (רקע כהה, פופ-אפ וחיצים)
+html_start = """<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הדירות שלנו בצפת</title>
+    <style>
+        body { margin: 0; padding: 40px 20px; font-family: 'Segoe UI', Arial, sans-serif; background-color: #121212; color: #e0e0e0; direction: rtl; text-align: right; }
+        .container { max-width: 600px; margin: 0 auto; }
+        h1 { text-align: center; color: #d4af37; letter-spacing: 1px; margin-bottom: 50px; font-size: 32px; font-weight: 300; }
+        .card { margin-bottom: 50px; padding-bottom: 30px; border-bottom: 1px solid #2a2a2a; }
+        h2 { color: #ffffff; margin: 0 0 15px 0; font-size: 22px; font-weight: 400; }
+        .main-img { width: 100%; height: auto; border-radius: 6px; display: block; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); cursor: pointer; }
+        details { margin-top: 15px; cursor: pointer; }
+        summary { font-weight: bold; color: #d4af37; padding: 8px 0; font-size: 14px; outline: none; user-select: none; }
+        .gallery { margin-top: 15px; display: flex; gap: 12px; justify-content: flex-start; flex-wrap: wrap; }
+        .gallery img { width: 31%; height: 100px; object-fit: cover; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.4); cursor: pointer; transition: transform 0.2s; }
+        .gallery img:hover { transform: scale(1.03); }
+        .footer { text-align: center; margin-top: 50px; font-size: 14px; color: #777777; padding-top: 20px; }
+        .lightbox { display: none; position: fixed; z-index: 1000; padding-top: 50px; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.9); user-select: none; }
+        .lightbox-content { margin: auto; display: block; width: 80%; max-width: 700px; max-height: 75vh; object-fit: contain; border-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.8); }
+        .close { position: absolute; top: 15px; right: 35px; color: #f1f1f1; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .close:hover { color: #d4af37; }
+        .prev, .next { cursor: pointer; position: absolute; top: 50%; width: auto; padding: 16px; margin-top: -50px; color: white; font-weight: bold; font-size: 30px; transition: 0.3s; user-select: none; }
+        .next { left: 15px; } .prev { right: 15px; }
+        .prev:hover, .next:hover { background-color: rgba(0, 0, 0, 0.8); color: #d4af37; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>הדירות שלנו בצפת</h1>
+"""
+
+html_cards = ""
+
+# סריקת תיקיית הדירות
+if os.path.exists(apartments_dir):
+    # סינון רק לתיקיות פנימיות
+    apt_folders = [f for f in os.listdir(apartments_dir) if os.path.isdir(os.path.join(apartments_dir, f))]
+    
+    for folder_name in apt_folders:
+        current_apt_path = os.path.join(apartments_dir, folder_name)
+        
+        # מציאת כל קבצי התמונות בתיקייה ומיונם לפי השם (1, 2, 3...)
+        all_files = os.listdir(current_apt_path)
+        images = [f for f in all_files if f.lower().endswith(('.png', '.jpg', '.jpeg', '.webp'))]
+        
+        # מיון חכם לפי המספר בשם הקובץ
+        images.sort(key=lambda f: int(''.join(filter(str.isdigit, f)) or 0))
+        
+        if not images:
+            continue
+            
+        # תמונה ראשונה (1) הופכת לראשית
+        main_img_path = f"דירות/{folder_name}/{images[0]}"
+        
+        html_cards += f"""
+        <div class="card">
+            <h2>{folder_name}</h2>
+            <img class="main-img gallery-img" src="{main_img_path}" alt="תמונה ראשית">
+        """
+        
+        # אם יש עוד תמונות, נשים אותן בספוילר
+        if len(images) > 1:
+            html_cards += """
+            <details>
+                <summary>📸 תמונות נוספות של הדירה...</summary>
+                <div class="gallery">
+            """
+            for extra_img in images[1:]:
+                extra_img_path = f"דירות/{folder_name}/{extra_img}"
+                html_cards += f'        <img class="gallery-img" src="{extra_img_path}" alt="תמונה נוספת">\n'
+                
+            html_cards += """
+                </div>
+            </details>
+            """
+            
+        html_cards += "</div>\n"
+
+html_end = """
+        <div class="footer">
+            <p>נשמח לארח אתכם לחופשה צפתית קסומה</p>
+            <p>לפרטים והזמנות חזרו למייל או התקשרו</p>
+        </div>
+    </div>
+
+    <div id="myLightbox" class="lightbox">
+        <span class="close" onclick="closeLightbox()">&times;</span>
+        <img class="lightbox-content" id="lightboxImg">
+        <a class="prev" onclick="changeImage(-1)">&#10095;</a>
+        <a class="next" onclick="changeImage(1)">&#10094;</a>
+    </div>
+
+    <script>
+        let currentImgIndex = 0;
+        let activeGalleryImages = [];
+
+        document.querySelectorAll('.card').forEach((card) => {
+            const images = Array.from(card.querySelectorAll('.gallery-img'));
+            images.forEach((img) => {
+                img.addEventListener('click', () => {
+                    activeGalleryImages = images;
+                    currentImgIndex = activeGalleryImages.indexOf(img);
+                    openLightbox();
+                });
+            });
+        });
+
+        function openLightbox() { document.getElementById("myLightbox").style.display = "block"; updateLightboxImage(); }
+        function closeLightbox() { document.getElementById("myLightbox").style.display = "none"; }
+        function updateLightboxImage() { document.getElementById("lightboxImg").src = activeGalleryImages[currentImgIndex].src; }
+        function changeImage(direction) {
+            currentImgIndex += direction;
+            if (currentImgIndex >= activeGalleryImages.length) currentImgIndex = 0;
+            if (currentImgIndex < 0) currentImgIndex = activeGalleryImages.length - 1;
+            updateLightboxImage();
+        }
+        document.getElementById("myLightbox").addEventListener('click', function(e) { if (e.target === this) closeLightbox(); });
+        document.addEventListener('keydown', function(e) {
+            if (document.getElementById("myLightbox").style.display === "block") {
+                if (e.key === "ArrowRight") changeImage(-1);
+                if (e.key === "ArrowLeft") changeImage(1);
+                if (e.key === "Escape") closeLightbox();
+            }
+        });
+    </script>
+</body>
+</html>
+"""
+
+# כתיבת קובץ ה-index.html הסופי
+with open(os.path.join(base_dir, 'index.html'), 'w', encoding='utf-8') as f:
+    f.write(html_start + html_cards + html_end)
+
+print("🌸 האתר עודכן ונבנה בהצלחה! כעת ניתן להעלות ל-GitHub.")
