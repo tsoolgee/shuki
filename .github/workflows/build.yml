@@ -2,8 +2,10 @@ name: Build Apartments Site
 
 on:
   push:
+    # עכשיו הרובוט יתעורר גם כשמשנים תמונות וגם כשמשנים את הרובוט עצמו!
     paths:
       - 'דירות/**'
+      - '.github/workflows/**'
 
 jobs:
   build:
@@ -44,7 +46,6 @@ jobs:
                 .gallery img:hover { transform: scale(1.03); }
                 .footer { text-align: center; margin-top: 50px; font-size: 14px; color: #777777; padding-top: 20px; }
                 
-                /* פופ-אפ ממורכז לחלוטין באמצעות Flexbox */
                 .lightbox { 
                     display: none; 
                     position: fixed; 
@@ -76,7 +77,6 @@ jobs:
                 .close { position: absolute; top: -45px; right: 0; color: #f1f1f1; font-size: 35px; font-weight: bold; cursor: pointer; transition: 0.3s; }
                 .close:hover { color: #d4af37; }
                 
-                /* חיצי ניווט ממוקמים קבוע בצידי המסך */
                 .prev, .next { 
                     cursor: pointer; 
                     position: fixed; 
@@ -95,7 +95,7 @@ jobs:
                 .prev { right: 20px; }
                 .prev:hover, .next:hover { background-color: rgba(0, 0, 0, 0.8); color: #d4af37; }
                 
-                /* קלאס להסתרת חיצים כשאין לאן להמשיך */
+                /* קלאס שמחביא את החיצים */
                 .hidden { display: none !important; }
             </style>
         </head>
@@ -124,7 +124,7 @@ jobs:
                     html_cards += '</div>\n</details>\n'
                 html_cards += '</div>\n'
                 
-        html_end = """<div class="footer"><p>נשמח לארח אתכם לחופשה צפתית קסומה</p><p>לפרטים והזמנות חזרו למייל או התקשרו</p></div></div><div id="myLightbox" class="lightbox"><div class="lightbox-wrapper"><span class="close" onclick="closeLightbox()">&times;</span><img class="lightbox-content" id="lightboxImg"></div><a class="prev" id="prevBtn" onclick="changeImage(-1)">&#10095;</a><a class="next" id="nextBtn" onclick="changeImage(1)">&#10094;</a></div><script>let currentImgIndex=0;let activeGalleryImages=[];document.querySelectorAll(".card").forEach(card=>{const images=Array.from(card.querySelectorAll(".gallery-img"));images.forEach(img=>{img.addEventListener("click",()=>{activeGalleryImages=images;currentImgIndex=activeGalleryImages.indexOf(img);openLightbox()})})});function openLightbox(){document.getElementById("myLightbox").style.display="flex";updateLightboxImage()}function closeLightbox(){document.getElementById("myLightbox").style.display="none"}function updateLightboxImage(){document.getElementById("lightboxImg").src=activeGalleryImages[currentImgIndex].src;const prevBtn=document.getElementById("prevBtn");const nextBtn=document.getElementById("nextBtn");if(activeGalleryImages.length<=1){prevBtn.classList.add("hidden");nextBtn.classList.add("hidden")}else{if(currentImgIndex===0){prevBtn.classList.add("hidden")}else{prevBtn.classList.remove("hidden")}if(currentImgIndex===activeGalleryImages.length-1){nextBtn.classList.add("hidden")}else{nextBtn.classList.remove("hidden")}}}function changeImage(direction){currentImgIndex+=direction;if(currentImgIndex>=activeGalleryImages.length)currentImgIndex=activeGalleryImages.length-1;if(currentImgIndex<0)currentImgIndex=0;updateLightboxImage()}document.getElementById("myLightbox").addEventListener("click",function(e){if(e.target===this)closeLightbox()});document.addEventListener("keydown",function(e){if(document.getElementById("myLightbox").style.display==="flex"){if(e.key==="ArrowRight"&&currentImgIndex>0)changeImage(-1);if(e.key==="ArrowLeft"&&currentImgIndex<activeGalleryImages.length-1)changeImage(1);if(e.key==="Escape")closeLightbox()}});</script></body></html>"""
+        html_end = """<div class="footer"><p>נשמח לארח אתכם לחופשה צפתית קסומה</p><p>לפרטים והזמנות חזרו למייל או התקשרו</p></div></div><div id="myLightbox" class="lightbox"><div class="lightbox-wrapper"><span class="close" onclick="closeLightbox()">&times;</span><img class="lightbox-content" id="lightboxImg"></div><a class="prev" id="prevBtn" onclick="changeImage(-1)">&#10095;</a><a class="next" id="nextBtn" onclick="changeImage(1)">&#10094;</a></div><script>let currentImgIndex=0;let activeGalleryImages=[];document.querySelectorAll(".card").forEach(card=>{const images=Array.from(card.querySelectorAll(".gallery-img"));images.forEach(img=>{img.addEventListener("click",()=>{activeGalleryImages=images;currentImgIndex=activeGalleryImages.indexOf(img);openLightbox()})})});function openLightbox(){document.getElementById("myLightbox").style.display="flex";updateLightboxImage()}function closeLightbox(){document.getElementById("myLightbox").style.display="none"}function updateLightboxImage(){document.getElementById("lightboxImg").src=activeGalleryImages[currentImgIndex].src;const prevBtn=document.getElementById("prevBtn");const nextBtn=document.getElementById("nextBtn");if(activeGalleryImages.length<=1){prevBtn.classList.add("hidden");nextBtn.classList.add("hidden")}else{if(currentImgIndex===0){prevBtn.classList.add("hidden")}else{prevBtn.classList.remove("hidden")}if(currentImgIndex===activeGalleryImages.length-1){nextBtn.classList.add("hidden")}else{nextBtn.classList.remove("hidden")}}}function changeImage(direction){currentImgIndex+=direction;if(currentImgIndex>=activeGalleryImages.length)currentImgIndex=activeGalleryImages.length-1;if(currentImgIndex<0)currentImgIndex=0;updateLightboxImage()}document.getElementById("myLightbox").addEventListener("click",function(e){if(e.target===this)closeLightbox()});document.addEventListener("keydown",function(e){if(document.getElementById("myLightbox").style.display==="flex"){if(e.key==="ArrowRight"&&currentImgIndex>0){changeImage(-1)}if(e.key==="ArrowLeft"&&currentImgIndex<activeGalleryImages.length-1){changeImage(1)}if(e.key==="Escape")closeLightbox()}});</script></body></html>"""
         
         with open('index.html', 'w', encoding='utf-8') as f:
             f.write(html_start + html_cards + html_end)
