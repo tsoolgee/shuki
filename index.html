@@ -19,9 +19,16 @@
         .gallery { margin-top: 15px; display: flex; gap: 12px; justify-content: flex-start; flex-wrap: wrap; }
         .gallery img { width: 31%; height: 100px; object-fit: cover; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.4); cursor: pointer; transition: transform 0.2s; }
         .gallery img:hover { transform: scale(1.03); }
+        
+        /* עיצוב חלק התחתון והמייל */
         .footer { text-align: center; margin-top: 50px; font-size: 15px; color: #aaaaaa; padding-top: 20px; border-top: 1px solid #2a2a2a; }
         .footer a { color: #d4af37; text-decoration: none; }
         .footer a:hover { text-decoration: underline; }
+        
+        /* אזור המייל עם לחצן העתקה בריחוף */
+        .email-wrapper { position: relative; display: inline-block; }
+        .copy-btn { position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #d4af37; color: #121212; border: none; padding: 4px 8px; font-size: 11px; font-weight: bold; border-radius: 4px; cursor: pointer; display: none; white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+        .email-wrapper:hover .copy-btn { display: block; }
         
         .lightbox { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); user-select: none; align-items: center; justify-content: center; }
         .lightbox-wrapper { position: relative; max-width: 85%; max-height: 85vh; display: flex; align-items: center; justify-content: center; }
@@ -65,4 +72,16 @@
 </div>
 </details>
 </div>
-<div class="footer"><p>ליצירת קשר במייל <a href="mailto:e0556749511@gmail.com">e0556749511@gmail.com</a> או בטלפון <a href="tel:0556749511">0556749511</a></p></div></div><div id="myLightbox" class="lightbox"><div class="lightbox-wrapper"><span class="close" onclick="closeLightbox()">&times;</span><img class="lightbox-content" id="lightboxImg"></div><a class="prev" id="prevBtn" onclick="changeImage(-1)">&#10095;</a><a class="next" id="nextBtn" onclick="changeImage(1)">&#10094;</a></div><script>let currentImgIndex=0;let activeGalleryImages=[];document.querySelectorAll(".card").forEach(card=>{const images=Array.from(card.querySelectorAll(".gallery-img"));images.forEach(img=>{img.addEventListener("click",()=>{activeGalleryImages=images;currentImgIndex=activeGalleryImages.indexOf(img);openLightbox()})})});function openLightbox(){document.getElementById("myLightbox").style.display="flex";updateLightboxImage()}function closeLightbox(){document.getElementById("myLightbox").style.display="none"}function updateLightboxImage(){document.getElementById("lightboxImg").src=activeGalleryImages[currentImgIndex].src;const prevBtn=document.getElementById("prevBtn");const nextBtn=document.getElementById("nextBtn");if(activeGalleryImages.length<=1){prevBtn.classList.add("hidden");nextBtn.classList.add("hidden")}else{if(currentImgIndex===0){prevBtn.classList.add("hidden")}else{prevBtn.classList.remove("hidden")}if(currentImgIndex===activeGalleryImages.length-1){nextBtn.classList.add("hidden")}else{nextBtn.classList.remove("hidden")}}}function changeImage(direction){currentImgIndex+=direction;if(currentImgIndex>=activeGalleryImages.length)currentImgIndex=activeGalleryImages.length-1;if(currentImgIndex<0)currentImgIndex=0;updateLightboxImage()}document.getElementById("myLightbox").addEventListener("click",function(e){if(e.target===this)closeLightbox()});document.addEventListener("keydown",function(e){if(document.getElementById("myLightbox").style.display==="flex"){if(e.key==="ArrowRight"&&currentImgIndex>0){changeImage(-1)}if(e.key==="ArrowLeft"&&currentImgIndex-1){changeImage(1)}if(e.key==="Escape")closeLightbox()}});</script></body></html>
+<div class="footer"><p>ליצירת קשר במייל 
+<span class="email-wrapper">
+    <button class="copy-btn" onclick="copyEmail(this)">📋 העתק מייל</button>
+    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=e0556749511@gmail.com" target="_blank" id="myEmail">e0556749511@gmail.com</a>
+</span>
+ או בטלפון <a href="tel:0556749511">0556749511</a></p></div></div><div id="myLightbox" class="lightbox"><div class="lightbox-wrapper"><span class="close" onclick="closeLightbox()">&times;</span><img class="lightbox-content" id="lightboxImg"></div><a class="prev" id="prevBtn" onclick="changeImage(-1)">&#10095;</a><a class="next" id="nextBtn" onclick="changeImage(1)">&#10094;</a></div><script>
+function copyEmail(btn) {
+    navigator.clipboard.writeText("e0556749511@gmail.com");
+    const originalText = btn.innerHTML;
+    btn.innerHTML = "✓ הועתק!";
+    setTimeout(() => { btn.innerHTML = originalText; }, 2000);
+}
+let currentImgIndex=0;let activeGalleryImages=[];document.querySelectorAll(".card").forEach(card=>{const images=Array.from(card.querySelectorAll(".gallery-img"));images.forEach(img=>{img.addEventListener("click",()=>{activeGalleryImages=images;currentImgIndex=activeGalleryImages.indexOf(img);openLightbox()})})});function openLightbox(){document.getElementById("myLightbox").style.display="flex";updateLightboxImage()}function closeLightbox(){document.getElementById("myLightbox").style.display="none"}function updateLightboxImage(){document.getElementById("lightboxImg").src=activeGalleryImages[currentImgIndex].src;const prevBtn=document.getElementById("prevBtn");const nextBtn=document.getElementById("nextBtn");if(activeGalleryImages.length<=1){prevBtn.classList.add("hidden");nextBtn.classList.add("hidden")}else{if(currentImgIndex===0){prevBtn.classList.add("hidden")}else{prevBtn.classList.remove("hidden")}if(currentImgIndex===activeGalleryImages.length-1){nextBtn.classList.add("hidden")}else{nextBtn.github.classList.add("hidden")}}}function changeImage(direction){currentImgIndex+=direction;if(currentImgIndex>=activeGalleryImages.length)currentImgIndex=activeGalleryImages.length-1;if(currentImgIndex<0)currentImgIndex=0;updateLightboxImage()}document.getElementById("myLightbox").addEventListener("click",function(e){if(e.target===this)closeLightbox()});document.addEventListener("keydown",function(e){if(document.getElementById("myLightbox").style.display==="flex"){if(e.key==="ArrowRight"&&currentImgIndex>0){changeImage(-1)}if(e.key==="ArrowLeft"&&currentImgIndex-1){changeImage(1)}if(e.key==="Escape")closeLightbox()}});</script></body></html>
