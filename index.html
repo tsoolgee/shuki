@@ -5,18 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>הדירות שלנו בצפת</title>
     <style>
-        body { margin: 0; padding: 20px; font-family: Arial, sans-serif; background-color: #f9f9f9; color: #333; direction: rtl; text-align: right; }
-        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #eef2f5; }
-        h1 { text-align: center; color: #8A6D3B; border-bottom: 2px solid #8A6D3B; padding-bottom: 10px; margin-bottom: 30px; font-size: 28px; }
-        .card { margin-bottom: 40px; padding: 15px; border: 1px solid #e0e0e0; border-radius: 6px; background-color: #fff; }
-        h2 { color: #4a4a4a; margin-top: 0; font-size: 20px; }
-        .meta { margin: 5px 0 15px 0; color: #666; font-size: 15px; }
-        .main-img { width: 100%; max-width: 100%; height: auto; border-radius: 4px; display: block; margin-bottom: 15px; }
-        details { border-top: 1px dashed #ccc; padding-top: 10px; cursor: pointer; }
-        summary { font-weight: bold; color: #8A6D3B; padding: 5px 0; font-size: 15px; outline: none; }
-        .gallery { margin-top: 15px; text-align: center; }
-        .gallery img { width: 100%; margin-bottom: 10px; border-radius: 4px; }
-        .footer { text-align: center; margin-top: 30px; font-size: 14px; color: #777; border-top: 1px solid #eee; padding-top: 15px; }
+        /* עיצוב כללי של דף הרקע הכהה והנקי */
+        body { 
+            margin: 0; 
+            padding: 40px 20px; 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background-color: #121212; /* רקע כהה */
+            color: #e0e0e0; 
+            direction: rtl; 
+            text-align: right; 
+        }
+        
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+        }
+        
+        /* כותרת ראשית מינימליסטית */
+        h1 { 
+            text-align: center; 
+            color: #d4af37; /* זהב עמום ויוקרתי */
+            letter-spacing: 1px;
+            margin-bottom: 50px; 
+            font-size: 32px; 
+            font-weight: 300;
+        }
+        
+        /* כרטיסיית דירה - נקייה, בלי מסגרות כבדות */
+        .card { 
+            margin-bottom: 50px; 
+            padding-bottom: 30px;
+            border-bottom: 1px solid #2a2a2a; /* קו הפרדה עדין במקום מסגרת */
+        }
+        
+        h2 { 
+            color: #ffffff; 
+            margin: 0 0 8px 0; 
+            font-size: 22px; 
+            font-weight: 400;
+        }
+        
+        .meta { 
+            margin: 0 0 20px 0; 
+            color: #aaaaaa; 
+            font-size: 14px; 
+        }
+        
+        /* תמונה ראשית קבועה */
+        .main-img { 
+            width: 100%; 
+            height: auto; 
+            border-radius: 6px; 
+            display: block; 
+            margin-bottom: 20px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+        
+        /* עיצוב הספוילר הנפתח */
+        details { 
+            margin-top: 15px; 
+            cursor: pointer; 
+        }
+        
+        summary { 
+            font-weight: bold; 
+            color: #d4af37; 
+            padding: 8px 0; 
+            font-size: 14px; 
+            outline: none; 
+            user-select: none;
+        }
+        
+        /* גלריית תמונות קטנות ומסודרות בשורה */
+        .gallery { 
+            margin-top: 15px; 
+            display: flex;
+            gap: 12px;
+            justify-content: flex-start;
+        }
+        
+        .gallery img { 
+            width: 31%; /* גודל קטן - כמעט שליש מסך לכל תמונה */
+            max-height: 100px;
+            object-fit: cover; /* שומר על פרופורציות התמונה */
+            border-radius: 4px; 
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+            transition: transform 0.2s;
+        }
+        
+        /* אפקט קטן כשמעבירים עכבר על התמונות הקטנות */
+        .gallery img:hover {
+            transform: scale(1.03);
+        }
+        
+        .footer { 
+            text-align: center; 
+            margin-top: 50px; 
+            font-size: 14px; 
+            color: #777777; 
+            padding-top: 20px; 
+        }
     </style>
 </head>
 <body>
@@ -24,12 +112,12 @@
         <h1>הדירות שלנו בצפת</h1>
         
         <div class="card">
-            <h2>דירה 1: עיר העתיקה - אבוהב 4 🏰</h2>
+            <h2>עיר העתיקה - אבוהב 4 🏰</h2>
             <p class="meta">☀️ מבנה קשתי עתיק | 🛏️ 6 מיטות פלוס חדר זוגי</p>
             <img class="main-img" src="img1.png" alt="תמונה ראשית">
             
             <details>
-                <summary>📸 לחצו כאן לצפייה בתמונות נוספות של הדירה...</summary>
+                <summary>📸 תמונות נוספות של הדירה...</summary>
                 <div class="gallery">
                     <img src="img2.png" alt="תמונה נוספת">
                     <img src="img3.png" alt="תמונה נוספת">
@@ -38,12 +126,12 @@
         </div>
 
         <div class="card">
-            <h2>דירה 2: אבוהב 2 - אפשרות לחשמל כשר 🕯️</h2>
+            <h2>אבוהב 2 - אפשרות לחשמל כשר 🕯️</h2>
             <p class="meta">✨ דירת נופש מרווחת ומושקעת | 🛏️ חדר שינה + ספה נפתחת</p>
             <img class="main-img" src="img3.png" alt="תמונה ראשית">
             
             <details>
-                <summary>📸 לחצו כאן לצפייה בתמונות נוספות של הדירה...</summary>
+                <summary>📸 תמונות נוספות של הדירה...</summary>
                 <div class="gallery">
                     <img src="img1.png" alt="תמונה נוספת">
                     <img src="img2.png" alt="תמונה נוספת">
@@ -52,12 +140,12 @@
         </div>
 
         <div class="card">
-            <h2>דירה 3: דירה מפנקת עם נוף לכנרת 🌊</h2>
+            <h2>דירה מפנקת עם נוף לכנרת 🌊</h2>
             <p class="meta">🌊 חלונות פנורמיים לכנרת | 🚶 10 דקות הליכה מהעתיקה</p>
             <img class="main-img" src="img2.png" alt="תמונה ראשית">
             
             <details>
-                <summary>📸 לחצו כאן לצפייה בתמונות נוספות של הדירה...</summary>
+                <summary>📸 תמונות נוספות של הדירה...</summary>
                 <div class="gallery">
                     <img src="img1.png" alt="תמונה נוספת">
                     <img src="img3.png" alt="תמונה נוספת">
@@ -66,8 +154,8 @@
         </div>
 
         <div class="footer">
-            <p>נשמח לארח אתכם לחופשה צפתית קסומה!</p>
-            <p><strong>לפרטים והזמנות חזרו למייל או התקשרו.</strong></p>
+            <p>נשמח לארח אתכם לחופשה צפתית קסומה</p>
+            <p>לפרטים והזמנות חזרו למייל או התקשרו</p>
         </div>
     </div>
 </body>
